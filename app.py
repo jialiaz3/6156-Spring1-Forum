@@ -1,4 +1,4 @@
-from flask import Flask, Response
+from flask import Flask, Response, request
 from flask_cors import CORS
 import json
 import logging
@@ -20,8 +20,6 @@ def hello_world():
     return '<u>Hello World!</u>'
 
 
-
-
 # /forum
 @app.route('/forum', methods=['GET', 'POST'])
 def get_forum():
@@ -40,11 +38,12 @@ def get_forum():
         rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
         return rsp
 
+
 # /forum/<f_id>
 @app.route('/forum/<f_id>', methods=['GET', 'DELETE'])
 def get_forum_by_f_id(f_id):
     if request.method == 'GET':
-        template = {"f_id":f_id}
+        template = {"f_id": f_id}
         res = UserResource.find_by_template(template)
         rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
         return rsp
@@ -54,11 +53,12 @@ def get_forum_by_f_id(f_id):
         rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
         return rsp
 
+
 # /forum/<title>
 @app.route('/forum/<title>', methods=['GET'])
 def get_forum_by_title(title):
     if request.method == 'GET':
-        template = {"title":title}
+        template = {"title": title}
         res = UserResource.find_by_template(template)
         rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
         return rsp
