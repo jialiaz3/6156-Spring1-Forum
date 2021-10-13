@@ -64,7 +64,7 @@ class RDBService:
         return res
 
     @classmethod
-    def get_where_clause_args(cls, template):
+    def _get_where_clause_args(cls, template):
 
         terms = []
         args = []
@@ -86,7 +86,7 @@ class RDBService:
     @classmethod
     def find_by_template(cls, db_schema, table_name, template):
 
-        wc,args = RDBService.get_where_clause_args(template)
+        wc,args = RDBService._get_where_clause_args(template)
 
         conn = RDBService._get_db_connection()
         cur = conn.cursor()
@@ -135,14 +135,14 @@ class RDBService:
         args = args + select_args
 
         sql_stmt = "update " + db_schema + "." + table_name + " " + clause + \
-                " " + select_clause
+                   " " + select_clause
 
         res = RDBService.run_sql(sql_stmt, args)
         return res
 
     @classmethod
     def delete(cls, db_schema, table_name, template):
-        clause, args = RDBService.get_where_clause_args(template)
+        clause, args = RDBService._get_where_clause_args(template)
         sql_stmt = "delete from " + db_schema + "." + table_name + " " + clause
         res = RDBService.run_sql(sql_stmt, args)
         return res
