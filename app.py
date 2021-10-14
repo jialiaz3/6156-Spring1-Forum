@@ -51,7 +51,7 @@ def get_forum_by_f_id(f_id):
         if update_data:
             pass
         else:
-            update_data = request.json[0]
+            update_data = request.json
         select_data = {'f_id': f_id}
         res = ForumResource.update(select_data, update_data)
         rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
