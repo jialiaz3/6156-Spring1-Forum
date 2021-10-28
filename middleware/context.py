@@ -23,9 +23,15 @@ def get_db_info():
         }
     else:
         db_info = {
+<<<<<<< HEAD
             "host": "localhost",
             "user": "root",
             "password": "aspirine",
+=======
+            "host": "sprint-hw1.c9u6tpsdswam.us-east-2.rds.amazonaws.com",
+            "user": "teamnamenotfound",
+            "password": "teamnamenotfound6156",
+>>>>>>> ea5f3376658a7a6939da1c0b15ad04bbc06a62fb
             "cursorclass": pymysql.cursors.DictCursor
         }
 
