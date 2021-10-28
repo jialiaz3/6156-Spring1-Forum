@@ -14,6 +14,9 @@ logger.setLevel(logging.INFO)
 app = Flask(__name__)
 CORS(app)
 
+# pagination data
+OFFSET = 0
+MAXLIMIT = 20
 
 @app.route('/')
 def hello_world():
@@ -24,7 +27,11 @@ def hello_world():
 @app.route('/forums', methods=['GET', 'POST'])
 def get_forums():
     if request.method == 'GET':
-        res = ForumResource.find_by_template(None)
+        offset = int(request.args.get("offset", OFFSET))
+        limit = int(request.args.get("limit", MAXLIMIT))
+        if limit > MAXLIMIT:
+            limit = MAXLIMIT
+        res = ForumResource.find_by_template(None, limit, offset)
         rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
         return rsp
     elif request.method == 'POST':

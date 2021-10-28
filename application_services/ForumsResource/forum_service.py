@@ -17,8 +17,8 @@ class ForumResource(BaseRDBApplicationResource):
     #     return res
 
     @classmethod
-    def find_by_template(cls, template):
-        res = RDBService.find_by_template('ForumInfo', 'Forum', template)
+    def find_by_template(cls, template, limit, offset):
+        res = RDBService.find_by_template('ForumInfo', 'Forum', template, limit, offset)
         return res
 
 
