@@ -41,25 +41,39 @@ def get_forums():
 # /forum/<f_id>
 @app.route('/forums/<f_id>', methods=['GET', 'PUT', 'DELETE'])
 def get_forum_by_f_id(f_id):
-    if request.method == 'GET':
-        template = {"f_id": f_id}
-        res = ForumResource.find_by_template(template)
-        rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
-        return rsp
-    elif request.method == 'PUT':
-        update_data = request.form
-        if update_data:
-            pass
-        else:
-            update_data = request.json
-        select_data = {'f_id': f_id}
-        res = ForumResource.update(select_data, update_data)
-        rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
-        return rsp
-    elif request.method == 'DELETE':
-        template = {"f_id": f_id}
-        res = ForumResource.delete(template)
-        rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
+    try:
+        f_id = int(f_id)
+        f_id = str(f_id)
+        if request.method == 'GET':
+            template = {"f_id": f_id}
+            try:
+                res = ForumResource.find_by_template(template)
+                if len(res) == 0:
+                    rsp = Response(json.dumps({"HTTP ERROR 404": "GET DOES NOT FIND THE RESOURCE FOR f_id="+f_id}, indent=4), status=404, content_type="application/json")
+                    return rsp
+                else:
+                    rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
+                    return rsp
+            except Exception as e:
+                rsp = Response(json.dumps({"HTTP ERROR 500": "COULD NOT CONNECT TO DB"}, indent=4), status=500, content_type="application/json")
+                return rsp
+        elif request.method == 'PUT':
+            update_data = request.form
+            if update_data:
+                pass
+            else:
+                update_data = request.json
+            select_data = {'f_id': f_id}
+            res = ForumResource.update(select_data, update_data)
+            rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
+            return rsp
+        elif request.method == 'DELETE':
+            template = {"f_id": f_id}
+            res = ForumResource.delete(template)
+            rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
+            return rsp
+    except Exception as e:
+        rsp = Response(json.dumps({"HTTP ERROR 402": "WRONG TYPE FOR f_id"}, indent=4), status=402, content_type="application/json")
         return rsp
 
 
