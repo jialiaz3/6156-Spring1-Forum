@@ -32,7 +32,7 @@ def get_forums():
         if create_data:
             pass
         else:
-            create_data = request.json[0]
+            create_data = request.json
         res = ForumResource.create(create_data)
         rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
         return rsp
