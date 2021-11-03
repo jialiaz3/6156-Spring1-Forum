@@ -25,7 +25,7 @@ class RDBService:
         db_info = context.get_db_info()
 
         db_connection = pymysql.connect(
-           **db_info,
+            **db_info,
             autocommit=True
         )
         return db_connection
@@ -53,7 +53,7 @@ class RDBService:
         cur = conn.cursor()
 
         sql = "select * from " + db_schema + "." + table_name + " where " + \
-            column_name + " like " + "'" + value_prefix + "%'"
+              column_name + " like " + "'" + value_prefix + "%'"
         print("SQL Statement = " + cur.mogrify(sql, None))
 
         res = cur.execute(sql)
@@ -74,19 +74,18 @@ class RDBService:
             clause = ""
             args = None
         else:
-            for k,v in template.items():
+            for k, v in template.items():
                 terms.append(k + "=%s")
                 args.append(v)
 
-            clause = " where " +  " AND ".join(terms)
-
+            clause = " where " + " AND ".join(terms)
 
         return clause, args
 
     @classmethod
     def find_by_template(cls, db_schema, table_name, template):
 
-        wc,args = RDBService._get_where_clause_args(template)
+        wc, args = RDBService._get_where_clause_args(template)
 
         conn = RDBService._get_db_connection()
         cur = conn.cursor()
@@ -106,7 +105,7 @@ class RDBService:
         vals = []
         args = []
 
-        for k,v in create_data.items():
+        for k, v in create_data.items():
             cols.append(k)
             vals.append('%s')
             args.append(v)
@@ -115,7 +114,7 @@ class RDBService:
         vals_clause = "values (" + ",".join(vals) + ")"
 
         sql_stmt = "insert into " + db_schema + "." + table_name + " " + cols_clause + \
-            " " + vals_clause
+                   " " + vals_clause
 
         res = RDBService.run_sql(sql_stmt, args)
         return res
@@ -145,4 +144,20 @@ class RDBService:
         clause, args = RDBService._get_where_clause_args(template)
         sql_stmt = "delete from " + db_schema + "." + table_name + " " + clause
         res = RDBService.run_sql(sql_stmt, args)
+        return res
+
+    @classmethod
+    def find_linked_user(cls, user_schema, forum_schema, user_table, forum_table, template):
+        wc, args = RDBService._get_where_clause_args(template)
+        conn = RDBService._get_db_connection()
+        cur = conn.cursor()
+
+        target_id = f'select {forum_schema}.{forum_table}.userID from {forum_schema}.{forum_table} {wc}'
+        sql = f'select * from {user_schema}.{user_table} where {user_schema}.{user_table}.id = ({target_id})'
+
+        res = cur.execute(sql, args)
+        res = cur.fetchall()
+
+        conn.close()
+
         return res

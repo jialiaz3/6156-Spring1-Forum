@@ -20,7 +20,7 @@ def hello_world():
     return '<u>Hello World!</u>'
 
 
-# /forum
+# /forums
 @app.route('/forums', methods=['GET', 'POST'])
 def get_forums():
     if request.method == 'GET':
@@ -38,7 +38,7 @@ def get_forums():
         return rsp
 
 
-# /forum/<f_id>
+# /forums/<f_id>
 @app.route('/forums/<f_id>', methods=['GET', 'PUT', 'DELETE'])
 def get_forum_by_f_id(f_id):
     if request.method == 'GET':
@@ -63,7 +63,7 @@ def get_forum_by_f_id(f_id):
         return rsp
 
 
-# /forum/<title>
+# /forums/<title>
 @app.route('/forums/title/<title>', methods=['GET'])
 def get_forum_by_title(title):
     if request.method == 'GET':
@@ -73,5 +73,15 @@ def get_forum_by_title(title):
         return rsp
 
 
+# /forums/<f_id>/user
+@app.route('/forums/<f_id>/users', methods=['GET'])
+def get_linked_user(f_id):
+    if request.method == 'GET':
+        template = {"f_id": f_id}
+        res = ForumResource.find_linked_user(template)
+        rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
+        return rsp
+
+
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
+    app.run(debug=True, host="0.0.0.0", port=5000)
