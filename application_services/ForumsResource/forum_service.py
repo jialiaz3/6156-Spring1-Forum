@@ -15,6 +15,11 @@ class ForumResource(BaseRDBApplicationResource):
     def find_by_template(cls, template):
         res = RDBService.find_by_template('ForumInfo', 'Forum', template)
         return res
+    
+    @classmethod
+    def find_by_template_fields(cls, fields, template):
+        res = RDBService.find_by_template_fields("ForumInfo", "Forum", fields, template)
+        return res
 
     @classmethod
     def create(cls, create_data):
