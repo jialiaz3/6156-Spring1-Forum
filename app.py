@@ -19,18 +19,21 @@ CORS(app)
 def hello_world():
     return '<u>Hello World!</u>'
 
-@app.route("/index", methods=["GET"])
+@app.route("/forums/index", methods=["GET"])
 def get_forums_field():
     if request.method == 'GET':
-        # /index?username=username1&f_id=1&fields=title,content
+        # /index?userID=2&gameID=20&fields=title,content
         f_id = request.args.get("f_id")
-        username = request.args.get("username")
+        userID = request.args.get("userID")
+        gameID = request.args.get("gameID")
         fields = request.args.get("fields")
         template = {}
         if f_id:
             template['f_id'] = f_id
-        if username:
-            template['username'] = username
+        if userID:
+            template['userID'] = userID
+        if gameID:
+            template['gameID'] = gameID
         res = ForumResource.find_by_template_fields(fields,template)
         resp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
         return resp
