@@ -34,7 +34,7 @@ def get_forums():
         else:
             create_data = request.json
         res = ForumResource.create(create_data)
-        rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
+        rsp = Response(json.dumps(res, default=str), status=201, content_type="application/json")
         return rsp
 
 
