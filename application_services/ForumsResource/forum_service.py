@@ -12,8 +12,8 @@ class ForumResource(BaseRDBApplicationResource):
         pass
 
     @classmethod
-    def find_by_template(cls, template):
-        res = RDBService.find_by_template('ForumInfo', 'Forum', template)
+    def find_by_template(cls, template, limit=None, offset=None, field_list=None):
+        res = RDBService.find_by_template("ForumInfo", "Forum", template, limit, offset, field_list)
         return res
     
     @classmethod
@@ -39,4 +39,14 @@ class ForumResource(BaseRDBApplicationResource):
     @classmethod
     def find_linked_user(cls, template):
         res = RDBService.find_linked_user("UserInfo", "ForumInfo", "User", "Forum", template)
+        return res
+
+    @classmethod
+    def find_linked_data(cls, target, template, key):
+        res = RDBService.find_linked_data("ForumInfo", "Forum", "Game", target, template, key)
+        return res
+
+    @classmethod
+    def get_total_num(cls, db_schema, table_name):
+        res = RDBService.get_total_num(db_schema, table_name)
         return res
