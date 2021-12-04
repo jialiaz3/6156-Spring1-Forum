@@ -141,8 +141,12 @@ def get_forum_by_f_id(f_id):
 @app.route('/forums/title/<title>', methods=['GET'])
 def get_forum_by_title(title):
     if request.method == 'GET':
+        offset = int(request.args.get("offset", OFFSET))
+        limit = int(request.args.get("limit", MAXLIMIT))
+        if limit > MAXLIMIT:
+            limit = MAXLIMIT
         template = {"title": title}
-        res = ForumResource.find_by_template(template)
+        res = ForumResource.find_by_template(template, limit, offset)
         rsp = Response(json.dumps(res, default=str), status=200, content_type="application/json")
         return rsp
 
@@ -169,4 +173,4 @@ def get_forums_from_userid(userid):
         return rsp
 
 if __name__ == '__main__':
-    app.run(debug=False, port=5000)
+    app.run(debug=True, port=5001)
