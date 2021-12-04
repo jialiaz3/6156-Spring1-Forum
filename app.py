@@ -35,6 +35,20 @@ def handle_links(url, offset, limit):
     links.append({"rel": "prev", "href": prevurl})
     return links
 
+@app.errorhandler(404)
+def not_found(e):
+    rsp = Response(response=json.dumps({"ERROR": "404 NOT FOUND"}, default=str, indent=4), status=404,
+                   content_type="application/json")
+    return rsp
+
+
+@app.errorhandler(500)
+def messy_error(e):
+    print(e)
+    rsp = Response(json.dumps({"ERROR": "500 WEIRD SERVER ERROR"}, default=str, indent=4), status=500,
+                   content_type="application/json")
+    return rsp
+
 @app.route('/')
 def hello_world():
     return '<u>Hello World!</u>'
